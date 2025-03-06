@@ -76,7 +76,10 @@
 
         <div class="section">
             <h2>Bitcoin Price</h2>
-            <p>Current Price: <strong>$48,500</strong></p>
+            <!-- <p>Current Price: <strong>$48,500</strong></p> -->
+            <p>Current Price: $<strong><span id="btc-price"></span></strong></p>
+            <p>Last Updated: <span id="last-updated"></span></p>
+            <button onclick="getPrice()" class="button">Refresh Price</button>
         </div>
     </div>
 
@@ -86,6 +89,19 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
+
+        async function getPrice() {
+            let apiPrice = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+            const response = await fetch(apiPrice);
+            const data = await response.json();
+            
+            const price = data.bitcoin.usd;
+            const timestamp = new Date().toLocaleString();
+            
+            document.getElementById('btc-price').textContent = price.toLocaleString('en-US')
+            document.getElementById('last-updated').textContent = timestamp;
+        }
+        window.onload = getPrice;
     </script>
 </body>
 </html>
